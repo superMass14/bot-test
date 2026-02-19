@@ -1,0 +1,9 @@
+scripts
+.env
+__pycache__
+.vscode
+.idea
+pyproject.toml
+.python-version
+uv.lock
+loader/*

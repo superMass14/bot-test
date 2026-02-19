@@ -1,0 +1,15 @@
+name: dtf_bot
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - aiohttp
+  - pandas
+  - tabulate
+  - pillow
+  - pip:
+    - discord-py
+    - python-dotenv
+    - black
