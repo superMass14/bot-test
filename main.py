@@ -5,7 +5,9 @@
 # ║                                                                       ║
 # ╚═══════════════════════════════════════════════════════════════════════╝
 import os
+import asyncio
 import discord
+from aiohttp import web
 from dotenv import load_dotenv
 from discord.ext import commands
 from utils.process_q import process_question
@@ -66,13 +68,42 @@ async def on_message(ctx):
         return
 
     # Create async task for parallel processing
-    bot.loop.create_task(process_question(ctx, question))
+    asyncio.create_task(process_question(ctx, question))
+
+
+async def handle_health(_request):
+    return web.Response(text="OK")
+
+
+async def start_web_server():
+    app = web.Application()
+    app.router.add_get("/", handle_health)
+    app.router.add_get("/health", handle_health)
+
+    runner = web.AppRunner(app)
+    await runner.setup()
+
+    port = int(os.getenv("PORT", "10000"))
+    site = web.TCPSite(runner, host="0.0.0.0", port=port)
+    await site.start()
+    print(f"Web server listening on 0.0.0.0:{port}")
+    return runner
+
+
+async def main():
+    if TOKEN is None:
+        raise ValueError("DISCORD_TOKEN is missing")
+
+    runner = await start_web_server()
+    try:
+        await bot.start(TOKEN)
+    finally:
+        await runner.cleanup()
 
 
 # ┌─────────────────────────────────────────────────────────────────────────┐
 # │                        BOT INITIALIZATION                               │
 # └─────────────────────────────────────────────────────────────────────────┘
 
-if TOKEN is None:
-    raise ValueError("DISCORD_TOKEN is not missing")
-bot.run(TOKEN)
+if __name__ == "__main__":
+    asyncio.run(main())
