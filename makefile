@@ -20,8 +20,16 @@ clean-code: check-formatting-all get-formatting-status-all format-all
 	@echo "Code cleaned and formatted, you can commit the changes now."
 
 # --------- Run bot ---------
+# Usage: make run-bot reset-log=true (to clear logs before starting)
+reset-log ?= false
+
 run-bot:
 	@clear
+	@if [ "$(reset-log)" = "true" ]; then \
+		echo "Resetting bot.log..."; \
+		> bot.log; \
+		echo "Logs cleared."; \
+	fi
 	@echo "Starting EpsilonAI bot..."
 	@python3 main.py
 

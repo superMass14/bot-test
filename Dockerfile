@@ -3,7 +3,7 @@ FROM continuumio/miniconda3:latest
 WORKDIR /app
 
 COPY environment.yml ./
-## COPY .env ./
+COPY .env ./
 RUN conda env create -f environment.yml &&  conda clean -afy
 
 COPY . .

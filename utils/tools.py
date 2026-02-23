@@ -2,20 +2,24 @@
 # │                           DEBUG                                         │
 # └─────────────────────────────────────────────────────────────────────────┘
 
+import logging
+
+logger = logging.getLogger('DTF-Bot.Tools')
+
 
 def debug(ctx):
     """
-    Debug logging function to print message context.
+    Debug logging function to log message context.
 
     Args:
         ctx: Discord context object containing message information
     """
-    print(f"Received /hello command from {ctx.author}")
-    print(
-        f"Context: {ctx.channel},\
-           \n\r-Server: {ctx.guild}, \
-           \n\r-Content: {ctx.content}, \
-           \n\r-Author: {ctx.author},"
+    logger.info(f"Received command from {ctx.author}")
+    logger.info(
+        f"Context: {ctx.channel}, "
+        f"Server: {ctx.guild}, "
+        f"Content: {ctx.content}, "
+        f"Author: {ctx.author}"
     )
 
 
